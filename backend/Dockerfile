@@ -3,7 +3,7 @@ FROM ubuntu:latest
 RUN # "=========Install oraKWlum API=========="
 # Dependencies
 RUN apt-get update
-RUN apt-get install git bcrypt python3.5-dev python3-pip build-essential python-pip libbson-dev libsasl2-dev libssl-dev python-software-properties
+RUN apt-get install -y git bcrypt python3.5-dev python3-pip build-essential python-pip libbson-dev libsasl2-dev libssl-dev python-software-properties
 # Get oKW
 RUN mkdir /opt && cd /opt
 RUN git clone git@github.com:gisce/oraKWlum-api-pub.git
