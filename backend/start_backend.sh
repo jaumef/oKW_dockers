@@ -6,7 +6,7 @@ docker build -t $image .
 ports="5000:5000"
 docker stop $container
 docker rm $container
-container_id=`docker run -d -p $ports --name $container -i $image`
+container_id=`docker run -d -p $ports --name $container -i $image --link db`
 if [ "$container_id" != "" ]
 then
     echo "$container_id" > id_backend
