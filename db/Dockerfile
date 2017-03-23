@@ -12,7 +12,7 @@ RUN apt-get install -y mongodb-org
 RUN mkdir -p /data/db
 
 #     Expose Mongo Port
-EXPOSE 27017
+# EXPOSE 27017 // No need if using --link
 
 #     Set entrypoint for mongod
 RUN echo "/usr/bin/mongod" >> /bin/bash.bashrc
@@ -22,7 +22,7 @@ RUN # echo "=========INSTALL REDIS=========="
 RUN apt-get update && apt-get install -y redis-server
 
 #     Expose REDIS Port
-EXPOSE 6379
+# EXPOSE 6379 // No need if using --link
 
 #     Set entrypoint for redis-server
 RUN echo "/usr/bin/redis-server" >> /bin/bash.bashrc
