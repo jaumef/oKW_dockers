@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get install -y git bcrypt python3.5-dev python3-pip build-essential python-pip libbson-dev libsasl2-dev libssl-dev python-software-properties
 # Get oKW
 RUN mkdir /opt && cd /opt
-RUN git clone git@github.com:gisce/oraKWlum-api-pub.git
+RUN git clone https://github.com/gisce/oraKWlum-api-pub.git
 # Python Dependencies
 RUN pip install stevedore
 RUN pip install /opt/oraKWlum-api-pub/requirements.txt
