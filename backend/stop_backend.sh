@@ -9,16 +9,16 @@ fi
 # Stop using id from file
 name=`docker stop $expected`
 if [ "$name" == $expected ]; then
-    echo -e ">\tStopped '$name'"
+    echo -e " --->\tStopped old docker '$name'"
 else
-    echo -e ">\tCould not stop '$expected'! Is it running?"
+    echo -e " --->\tCould not stop '$expected'! Is it running?"
 fi
 # Delete using id from file
 name=`docker rm $expected`
 if [ "$name" == $expected ]; then
-    echo -e ">\tRemoved '$name'"
+    echo -e " --->\tRemoved old docker '$name'"
 else
-    echo -e ">\tCould not removed '$expected'! Does it exists?"
+    echo -e " --->\tCould not removed '$expected'! Does it exists?"
 fi
 # Delete id file
 rm $filename
