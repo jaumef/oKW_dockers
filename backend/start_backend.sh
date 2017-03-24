@@ -2,7 +2,7 @@
 container="backend"
 image="okw/"$container
 docker rmi $image
-docker build -t $image .
+docker build -t $image --network host .
 ports="5000:5000"
 docker stop $container
 docker rm $container
