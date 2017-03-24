@@ -3,17 +3,34 @@ FROM ubuntu:latest
 RUN # "=========Install oraKWlum API=========="
 # Dependencies
 RUN apt-get update
-RUN apt-get install -y git bcrypt python3.5-dev python3-pip build-essential python-pip libbson-dev libsasl2-dev libssl-dev python-software-properties
+RUN apt-get install -y git bcrypt python3.5-dev python3-pip build-essential libbson-dev libsasl2-dev libssl-dev python-software-properties
+RUN ln -s /usr/bin/pip3 /usr/bin/pip
 # Get oKW
-RUN cd /opt
-RUN git clone https://github.com/gisce/oraKWlum-api-pub.git
+#	Add required SSH keys from HOST
+RUN apt-get -y install ssh
+RUN mkdir -p ~/.ssh
+ADD ["ssh/id_rsa", "/root/.ssh/id_rsa"]
+ADD ["ssh/id_rsa.pub", "/root/.ssh/id_rsa.pub"]
+RUN chmod 600 /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa.pub
+RUN ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
+#	Clone repository
+RUN cd /opt && git clone git@github.com:gisce/oraKWlum-api-pub.git
 # Python Dependencies
+RUN pip install --upgrade pip
 RUN pip install stevedore
-RUN pip install /opt/oraKWlum-api-pub/requirements.txt
-
-RUN # "=========Install Monary=========="
-RUN /opt/oraKWlum-api-pub/utils/Monary.sh
-
-RUN # "=========Set Environment Vars=========="
+# Install Monary dependency
+RUN mkdir -p /root/src
+RUN cd /root/src && rm -fR mongo-c-dr*
+RUN cd /root/src && wget https://github.com/mongodb/mongo-c-driver/releases/download/1.5.0/mongo-c-driver-1.5.0.tar.gz
+RUN cd /root/src && tar xfzp mongo-c-dr*
+RUN cd /root/src/mongo-c-driver* && ./configure --enable-ssl=yes --enable-sasl=yes
+RUN cd /root/src/mongo-c-driver* && make
+RUN cd /root/src/mongo-c-driver* && make test
+RUN cd /root/src/mongo-c-driver* && make install
+RUN ln -s /usr/local/lib/lib* /usr/lib/
+RUN pip install monary==0.5.0
+# Install python requirements from api repository
+RUN pip install -r /opt/oraKWlum-api-pub/requirements.txt
+# "Set Environment Vars"
 ENV PATHH=/opt/oraKWlum-api-pub PROCESSES=20 SOCKET=/tmp/orakwlum-api.sock
-
