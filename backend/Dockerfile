@@ -32,5 +32,12 @@ RUN ln -s /usr/local/lib/lib* /usr/lib/
 RUN pip install monary==0.5.0
 # Install python requirements from api repository
 RUN pip install -r /opt/oraKWlum-api-pub/requirements.txt
-# "Set Environment Vars"
+# Set Read permissions on api repository
+RUN chmod -R 777 /opt/oraKWlum-api-pub
+# RUN chmod -R +x /opt/oraKWlum-api-pub/application
+# Set Environment Vars
 ENV PATHH=/opt/oraKWlum-api-pub PROCESSES=20 SOCKET=/tmp/orakwlum-api.sock
+# Set runnable to start
+RUN echo "uwsgi -s $SOCKET --manage-script-name --chdir $PATHH --mount /=main:app --thunder-lock -p $PROCESSES --enable-threads" > run_server.sh
+RUN chmod +rx run_server.sh
+ENTRYPOINT /run_server.sh
