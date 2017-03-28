@@ -9,11 +9,12 @@ html_path=$PWD"/html"
 echo "Using as default nginx conf: {cwd}/nginx.conf"
 nginx_config_path=$PWD"/nginx.conf"
 docker build -t $container . 
-container_id=`docker run $ports --name $name -d -i $container -v /tmp/docker_sockets:/tmp/`
+./stop_frontend.sh
+container_id=`docker run $ports --name $name -d -v /tmp/docker_sockets:/tmp/ -v /var/log/nginx/frontend_docker:/var/log/orakwlum -i $container service nginx start`
 if [ "$container_id" != "" ]
 then
     echo "$container_id" > id_frontend
-    echo "Container started! id: "$container_id
+    echo "Container $container started! id: $container_id"
 else
     if [ -e "id_frontend" ]; then
         rm id_frontend
