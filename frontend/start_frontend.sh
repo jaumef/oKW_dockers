@@ -4,13 +4,21 @@ name="frontend"
 container="okw/"$name
 echo "Using default ports (8080->80 443->443)"
 ports="-p 8080:80 -p 443:443"
-echo "Using as default html path: {cwd}/html"
-html_path=$PWD"/html"
-echo "Using as default nginx conf: {cwd}/nginx.conf"
-nginx_config_path=$PWD"/nginx.conf"
+socket_path="/tmp/docker_sockets"
+if [ -d $socket_path ]; then
+    mkdir -p $socket_path
+fi
+# Ensure permissions on socket
+chmod -R 777 $socket_path
+sockets="-v $socket_path:/tmp/"
+log_path="/var/log/nginx/frontend_docker"
+if [ -d $log_path ]; then
+    mkdir -p $log_path
+fi
+logs="-v $log_path:/var/log/orakwlum"
 docker build -t $container . 
 ./stop_frontend.sh
-container_id=`docker run $ports --name $name -d -v /tmp/docker_sockets:/tmp/ -v /var/log/nginx/frontend_docker:/var/log/orakwlum -i $container service nginx start`
+container_id=`docker run $ports --name $name -d $sockets $logs -i $container service nginx start`
 if [ "$container_id" != "" ]
 then
     echo "$container_id" > id_frontend
