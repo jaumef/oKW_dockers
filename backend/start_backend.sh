@@ -3,10 +3,9 @@ container="backend"
 image="okw/"$container
 #docker rmi $image
 docker build -t $image --network host .
-ports="5000:5000"
+ports="-p 5000:5000"
 ./stop_backend.sh
-container_id=`docker run -d -p $ports --name $container -i $image -v /tmp/docker_sockets:/tmp/`
-# ./opt/oraKWlum-api-pub/utils/start_api_server.sh`
+container_id=`docker run -d $ports --name $container -v /tmp/docker_sockets:/tmp/ --network host -i $image`
 if [ "$container_id" != "" ]
 then
     echo "$container_id" > id_backend
