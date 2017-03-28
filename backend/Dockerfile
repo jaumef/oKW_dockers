@@ -1,6 +1,5 @@
 # Utilitzar com a base: ubuntu
 FROM ubuntu:latest
-RUN # "=========Install oraKWlum API=========="
 # Dependencies
 RUN apt-get update
 RUN apt-get install -y git bcrypt python3.5-dev python3-pip build-essential libbson-dev libsasl2-dev libssl-dev python-software-properties
@@ -34,7 +33,6 @@ RUN pip install monary==0.5.0
 RUN pip install -r /opt/oraKWlum-api-pub/requirements.txt
 # Set Read permissions on api repository
 RUN chmod -R 777 /opt/oraKWlum-api-pub
-# RUN chmod -R +x /opt/oraKWlum-api-pub/application
 # Set Environment Vars
 ENV PATHH=/opt/oraKWlum-api-pub PROCESSES=20 SOCKET=/tmp/orakwlum-api.sock
 # Set runnable to start
