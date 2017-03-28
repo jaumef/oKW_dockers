@@ -26,5 +26,5 @@ rm $filename
 echo "------------------------------------------------------"
 echo "|              Available Dockers (ps -a):            |"
 echo "------------------------------------------------------"
-echo `docker ps -a`
+docker ps -a
 
