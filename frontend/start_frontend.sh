@@ -1,13 +1,16 @@
 #!/bin/bash
 # Set Server Name
-if [ "$1" == "" ]; then
-    server_name="$1"
-else
-    echo -n "Enter a server name to patch [localhost]: "
+if [ "$#" -ne 1 ]; then
+    def_serv_name="localhost"
+    echo -n "Enter a server name to patch [$def_serv_name]: "
     read server_name
+    if [ "$server_name" = "" ]; then
+        server_name=$def_serv_name
+    fi
+else
+    server_name="$1"
 fi
 name="frontend"
-server_name=""
 container="okw/"$name
 ports="-p 8080:80 -p 443:443"
 socket_path="/tmp/docker_sockets"
@@ -24,7 +27,7 @@ fi
 logs="-v $log_path:/var/log/orakwlum"
 # Stop and delete last frontend container
 ./stop_frontend.sh
-container_id=`docker run $ports --name $name -d $sockets $logs -i $container ./run_frontend.sh $server_name`
+container_id=`docker run $ports --name $name -d $sockets $logs -i $container /run_frontend.sh $server_name`
 if [ "$container_id" != "" ]
 then
     echo "$container_id" > id_frontend
