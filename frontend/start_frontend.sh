@@ -24,7 +24,7 @@ fi
 logs="-v $log_path:/var/log/orakwlum"
 # Stop and delete last frontend container
 ./stop_frontend.sh
-container_id=`docker run $ports --name $name -d $sockets $logs -i $container run_frontend.sh $server_name`
+container_id=`docker run $ports --name $name -d $sockets $logs -i $container ./run_frontend.sh $server_name`
 if [ "$container_id" != "" ]
 then
     echo "$container_id" > id_frontend
